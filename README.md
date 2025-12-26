@@ -12,6 +12,6 @@ This project aims to build a meaningful and well-structured backend system while
 - Docker
 
 ## Running the project
-docker-compose up db
-npm install
-npm run start:dev
+- docker-compose up db
+- npm install
+- npm run start:dev
