@@ -1,11 +1,21 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaClient } from "prisma/generated";
+import { Injectable, OnModuleInit } from "@nestjs/common";
+import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Injectable()
-export class PrismaService extends PrismaClient {
+export class PrismaService extends PrismaClient implements OnModuleInit {
     constructor() {
-        const adapter = new PrismaPg({url: process.env.DATABASE_URL});
-        super({adapter});
+        const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+        const adapter = new PrismaPg(pool);
+        super({ adapter });    
+    }
+
+    async onModuleInit() {
+        await this.$connect();
+        console.log('🚀 Conectado ao Postgres via Driver Adapter!');
     }
 }
